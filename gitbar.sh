@@ -31,23 +31,23 @@ echo -n "Status: "
 
 
 echo "---"
-staged=($(git -C $dir/.. status --porcelain | grep "^\w" | cut -c 4-))
+git -C $dir/.. status --porcelain | grep "^\w" | cut -c 4- | readarray staged
 stagedcount=${#staged[@]}
 echo "Staged changes: $stagedcount"
-for stagedfile in ${staged[@]}; do
+for stagedfile in "${staged[@]}"; do
 	echo "--$stagedfile"
 done
 
-unstaged=($(git -C $dir/.. status --porcelain | grep "^ \w" | cut -c 4-))
+git -C $dir/.. status --porcelain | grep "^.\w" | cut -c 4- | readarray unstaged
 unstagedcount=${#unstaged[@]}
 echo "Unstaged changes: $unstagedcount"
 echo "--(Click to stage)"
-for unstagedfile in ${unstaged[@]}; do
+for unstagedfile in "${unstaged[@]}"; do
 	echo "--$unstagedfile | refresh=true terminal=false bash='git -C $dir/.. add $dir/../$unstagedfile'"
 done
 
-untracked=($(git -C $dir/.. status --porcelain | grep "^??" | cut -c 4-))
-untrackedcount=${#untracked[@]}
+git -C $dir/.. status --porcelain | grep "^??" | cut -c 4- | readarray untracked
+untrackedcount="${#untracked[@]}"
 echo "Untracked changes: $untrackedcount"
 echo "--(Click to stage)"
 for untrackedfile in ${untracked[@]}; do

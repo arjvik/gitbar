@@ -74,6 +74,9 @@ echo "More options"
 echo "--Amend to previous commit | refresh=true terminal=true bash='git -C \"$dir/..\" commit --amend && exit'"
 
 echo "---"
+echo "Launch repo in terminal | refresh=true terminal=true bash='cd $dir/..'"
+
+echo "---"
 echo "Switch repository"
 readarray -t gitdirs < <(find ~/ -name ".git" 2>/dev/null)
 for ndir in "${gitdirs[@]}"; do

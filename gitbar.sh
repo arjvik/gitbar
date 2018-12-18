@@ -67,11 +67,12 @@ done
 echo "---"
 echo "Add all files to index | refresh=true terminal=false bash='git -C \"$dir/..\" add -A'"
 echo "Commit changes | refresh=true terminal=true bash='git -C \"$dir/..\" commit && exit'"
+echo "Amend to previous commit | refresh=true terminal=true bash='git -C \"$dir/..\" commit --amend && exit'"
 echo "Push to origin | refresh=true terminal=true bash='git -C \"$dir/..\" push origin $branch && exit'"
 echo "Pull from origin | refresh=true terminal=false bash='git -C \"$dir/..\" pull origin $branch'"
 
 echo "More options"
-echo "--Amend to previous commit | refresh=true terminal=true bash='git -C \"$dir/..\" commit --amend && exit'"
+echo "--Delete repo from gitbar | refresh=true terminal=false bash='echo \"$dir\" >> ~/.gitbar-ignore'"
 
 echo "---"
 echo "Launch repo in terminal | refresh=true terminal=true bash='cd $dir/..'"
@@ -80,8 +81,10 @@ echo "---"
 echo "Switch repository"
 readarray -t gitdirs < <(find ~/ -name ".git" 2>/dev/null)
 for ndir in "${gitdirs[@]}"; do
-	name="$(echo $ndir|rev|cut -d/ -f2|rev)"
-	echo "--$name | refresh=true terminal=false bash='echo \"$ndir\" > ~/.gitbar-save'"
+	if ! grep -Fxq "$ndir" ~/.gitbar-ignore ; then
+		name="$(echo $ndir|rev|cut -d/ -f2|rev)"
+		echo "--$name | refresh=true terminal=false bash='echo \"$ndir\" > ~/.gitbar-save'"
+	fi
 done
 
 echo "Refresh | refresh=true"
